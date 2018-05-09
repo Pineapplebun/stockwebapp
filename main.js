@@ -3,7 +3,7 @@
 const https = require("https")
 const url = require("url")
 const querystring = require("querystring")
-
+const fs = require("fs")
 // Stock API for daily series
 /* Example format for daily series
 {
@@ -32,7 +32,7 @@ const querystring = require("querystring")
 */
 var timeSeries = 'TIME_SERIES_DAILY'
 var symbol = 'MSFT'
-var apiKeyAV = 'QR0YZ8X83E7MPBBD'
+var apiKeyAV = fs.readFileSync("./api.txt")
 var urlAV = `https://www.alphavantage.co/query?function=${timeSeries}&symbol=${symbol}&apikey=${apiKeyAV}`
 
 function getCollection(callback) {
