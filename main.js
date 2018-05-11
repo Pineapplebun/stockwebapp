@@ -1,9 +1,6 @@
-"use strict";
-
 const https = require("https")
-const url = require("url")
-const querystring = require("querystring")
 const fs = require("fs")
+
 // Stock API for daily series
 /* Example format for daily series
 {
@@ -30,14 +27,18 @@ const fs = require("fs")
             "5. volume": "24242019"
         },
 */
+
+module.exports = {
+    getCollection: getCollection,
+    getIntervalCollection: getIntervalCollection
+}
+var symbol = ''
 var timeSeries = 'TIME_SERIES_DAILY'
-var symbol = 'MSFT'
 var apiKeyAV = fs.readFileSync("./api.txt")
 var urlAV = `https://www.alphavantage.co/query?function=${timeSeries}&symbol=${symbol}&apikey=${apiKeyAV}`
 
-function getCollection(callback) {
-    // urlAV returns a JSON string
-    
+function getCollection(req, callback) {
+    urlAV = `https://www.alphavantage.co/query?function=${timeSeries}&symbol=${req.symbol}&apikey=${apiKeyAV}`
     https.get(urlAV, (res) => {
         // data is requested is buffered
         let data = ''
@@ -48,16 +49,16 @@ function getCollection(callback) {
     .on('error', (e) => {print(Error(e));})
 }
 
-function getIntervalCollection(start, end, callback) {
+function getIntervalCollection(req, callback) {
     let startDate;
     let endDate;
     try {
-        startDate = new Date(start);
-        endDate = new Date(end);
+        startDate = new Date(req.start);
+        endDate = new Date(req.end);
     } catch (e) {
         throw Error(e)
     }
-    getCollection((data) => {
+    getCollection(req, (data) => {
         let arrSeries = data;
         let interval = [];
         for (let timepoint of arrSeries) {
@@ -67,7 +68,7 @@ function getIntervalCollection(start, end, callback) {
                 interval.push(timepoint);
             }
         }
-        callback(JSON.stringify(interval));
+        callback(interval);
     });
     
 }
@@ -93,4 +94,5 @@ function array(data) {
 }
 
 //getCollection(print);
-getIntervalCollection('2017-12-01', '2018-01-30', print);
+//getIntervalCollection('2017-12-01', '2018-01-30', print);
+
