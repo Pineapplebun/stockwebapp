@@ -10,13 +10,12 @@ const main = require('./main')
 var app = express();
 const PORT = process.env.PORT || 3000;
 
+// Use EJS template engine
+app.set('view engine', 'ejs');
+
 // use the public folder files as the client side files needed
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
-
-// Overrides the HTTP method used.  Primarily for backwards compatibility
-// but helps to ensure the server is presenting a RESTful API even when not
-// fully supported by front end actions
 app.use(methodOverride('_method'));
 app.use(cookieParser('my very well kept secret'));
 
@@ -28,31 +27,41 @@ function myLogger(req, res, next) {
     if (req.body) {
         console.log('LOG:', req.method, req.url, req.body);
     }
+    // Add something to the header field
     res.append('Set-Cookie', `lastPage= ${req.url}`);
     next();
 }
 
-// Define routes here
-// POST request for a given user and password
-
-// POST request to add a stock to the watchlist
-app.get('/watchlist/add', function(req, res) {
-    //localhost:3000/watchlist/add?symbol=amd
-    res.send(`added ${req.query.symbol} to watchlist`)
-})
+app.use(myLogger);
 
 // GET request for a stock symbol
 app.get('/', function(req, res) {
-    res.sendFile('./public/index.html')
+    res.sendFile('./public/index.html');
+})
+
+// POST request for a given user and password
+// TODO:
+
+// POST request to add a stock to the watchlist
+// Example: localhost:3000/watchlist/add?symbol=amd
+app.get('/watchlist/add', function(req, res) {
+    res.send(`added ${req.query.symbol} to watchlist`);
+})
+
+// GET request for displaying chart data
+// render() defaults to views directory
+// Example: localhost:3000/visualize?symbol=amd
+app.get('/visualize', function(req, res) {
+    
 })
 
 // GET request for the graph data
+// console.log(req.params.symbol)
+// main.getCollection(req, (data) => res.json(data))
+// Example localhost:3000/amd?start=2017-12-01&end=2018-01-30
 app.get('/:symbol', function(req, res) {
-    //console.log(req.params.symbol)
-    //main.getCollection(req, (data) => res.json(data))
-    //localhost:3000/amd?start=2017-12-01&end=2018-01-30
-    let msg = {start: req.query.start, end: req.query.end, symbol: req.params.symbol}
-    main.getIntervalCollection(msg, (data) => res.json(data))
+    let msg = {start: req.query.start, end: req.query.end, symbol: req.params.symbol};
+    main.getIntervalCollection(msg, (data) => res.json(data));
 })
 
 // Start Listening

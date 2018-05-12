@@ -1,5 +1,4 @@
-
-class SideWidget extends React.Component {
+export class SideWidget extends React.Component {
     constructor(props) {
         super(props)
 
@@ -17,6 +16,7 @@ class SideWidget extends React.Component {
         this.handleEndDateChange = this.handleEndDateChange.bind(this)
         this.handleSelectStock = this.handleSelectStock.bind(this)
         this.handleChartUpdate = this.handleChartUpdate.bind(this)
+        this.handleTextBox = this.handleTextBox.bind(this)
     }
 
     // calls the callback for the parent of SideWidget
@@ -63,7 +63,7 @@ class SideWidget extends React.Component {
                 />
                 <form onSubmit={this.handleSubmit}>
                     <input
-                        onChange={this.handleChange}
+                        onChange={this.handleTextBox}
                         value={this.state.text}
                     />
                     <button>Add to Watchlist</button>
@@ -72,6 +72,9 @@ class SideWidget extends React.Component {
         )
     }
 
+    handleTextBox(e) {
+        this.setState({text: e.target.value})
+    }
     
     handleSubmit(e) {
         e.preventDefault();
