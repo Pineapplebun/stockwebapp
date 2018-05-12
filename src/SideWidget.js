@@ -1,4 +1,6 @@
-export class SideWidget extends React.Component {
+import React, { Component } from 'react';
+import './SideWidget.css';
+export class SideWidget extends Component {
     constructor(props) {
         super(props)
 
@@ -21,16 +23,19 @@ export class SideWidget extends React.Component {
 
     // calls the callback for the parent of SideWidget
     handleChartUpdate(e) {
+        console.log(this);
         this.props.onChartUpdate({
             startDate: this.state.startDate,
             endDate: this.state.endDate,
-            selStock: this.state.selStock
+            symbol: this.state.selStock
         })
     }
 
     // callback for the select stock in StockList
     handleSelectStock(e) {
-        this.setState({selStock: e})
+        const s = e;
+        this.setState({selStock: s});
+        console.log(this);
     }
 
     // render the sidebar html
@@ -122,7 +127,8 @@ class StockList extends React.Component {
         this.handleClick = this.handleClick.bind(this)
     }
     handleClick(e) {
-        this.props.onSelectStock(e.target.text)
+        // console.log(e.target.value);
+        this.props.onSelectStock(e.target.value);
     }
     render() {
       return (
@@ -134,11 +140,17 @@ class StockList extends React.Component {
       );
     }
 }
-  
-  // Can you list Item's props?
-  
+
 function Item(props) {
     return (
-        <li>{props.text} -> {props.price}</li>
+        <li>
+            <div >
+                <label class="switch">
+                    <input type="checkbox" value={props.text} onClick={props.onClick}/>
+                    <span class="slider round"></span>
+                </label>
+                {props.text}
+            </div>
+        </li>
     )
 }

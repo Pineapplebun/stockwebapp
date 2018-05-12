@@ -1,20 +1,18 @@
 "use strict";
-
+const https = require('https');
 const express = require("express")
 const morgan = require('morgan')
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
-const main = require('./main')
+const main = require('./main');
+const fs = require('fs');
 
 var app = express();
-const PORT = process.env.PORT || 3000;
-
-// Use EJS template engine
-app.set('view engine', 'ejs');
+const PORT = process.env.PORT || 3002;
 
 // use the public folder files as the client side files needed
-app.use(express.static('public'));
+app.use(express.static('build'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 app.use(cookieParser('my very well kept secret'));
@@ -36,7 +34,7 @@ app.use(myLogger);
 
 // GET request for a stock symbol
 app.get('/', function(req, res) {
-    res.sendFile('./public/index.html');
+    res.sendFile('./build/index.html');
 })
 
 // POST request for a given user and password
@@ -46,13 +44,6 @@ app.get('/', function(req, res) {
 // Example: localhost:3000/watchlist/add?symbol=amd
 app.get('/watchlist/add', function(req, res) {
     res.send(`added ${req.query.symbol} to watchlist`);
-})
-
-// GET request for displaying chart data
-// render() defaults to views directory
-// Example: localhost:3000/visualize?symbol=amd
-app.get('/visualize', function(req, res) {
-    
 })
 
 // GET request for the graph data
@@ -68,3 +59,15 @@ app.get('/:symbol', function(req, res) {
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
+/*
+const options = {
+    cert: fs.readFileSync('./localhost.crt'),
+    key: fs.readFileSync('./localhost.key')
+};
+
+const server = https.createServer(options, app);
+
+server.listen(8001, function(){
+    console.log("server running at https://localhost:8001/")
+});*/
+
