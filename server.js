@@ -31,8 +31,8 @@ function myLogger(req, res, next) {
 
 app.use(myLogger);
 
-var index = require('routes/index');
-var watchlist = require('routes/watchlist');
+var index = require('./routes/index');
+var watchlist = require('./routes/watchlist');
 // var users = require('./routes/users')
 
 app.use('/', index);
