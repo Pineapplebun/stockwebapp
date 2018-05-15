@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { LineChart, Line, XAxis, YAxis } from 'recharts';
 
 export class MainFrame extends Component {
+    // The Main Frame has more than just the chart
     render() {
         const data = this.props.chartData;
         const XAxisKey = this.props.XAxisKey;

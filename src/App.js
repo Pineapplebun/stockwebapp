@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './App.css';
-import {SideWidget} from './SideWidget.js';
-import {MainFrame} from './MainFrame.js';
+import {SideFrame} from './components/SideFrame.js';
+import {MainFrame} from './components/MainFrame.js';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        items: [],
         chartInfo: {},
-        chartData: []
+        chartData: [],
+        newsData: []
     };
     this.handleGraphicsUpdate = this.handleGraphicsUpdate.bind(this);
-    this.handleSort = this.handleSort.bind(this);
+    this.handleChartSort = this.handleChartSort.bind(this);
   }
 
   // e = {startDate: , endDate: , selStock: }
@@ -22,36 +23,31 @@ class App extends Component {
       // Fetch from our server the stock data
       // Save this data in this.state.chartInfo
       console.log(e);
-      fetch(`http://localhost:3002/${e.symbol}?start=${e.startDate}&end=${e.endDate}`)
+      fetch(`http://localhost:3000/watchlist/${e.symbol}?start=${e.startDate}&end=${e.endDate}`)
       .then(response => { 
           if (response.ok) {
               return response.json();
           } else {
-              throw "No Data";
+              throw response.error;
           }
       })
       .then(json => {
-          let newItems = []
-          for (let item in json.rates) {
-              newItems.push(item + " -> " + json.rates[item]);
-          }
-          this.setState({items: newItems});
-          this.setState({chartData: this.handleSort(json)});
-
+          console.log(json);
+          this.setState({chartData: this.handleChartSort(json.stockData)});
+          this.setState({newsData: json.newsData});
       })
       .catch(error => console.log(error))
   }
 
-  handleSort(chartData) {
+  handleChartSort(chartData) {
     if (chartData) {
       let sorted = [];
       for (let obj of chartData) {
         let key = Object.keys(obj)[0];
         let datum = obj[key];
         datum["time"] = key;
-        datum["volume"] = parseInt(datum["5. volume"]);
+        datum["volume"] = parseInt(datum["5. volume"], 10);
         sorted.push(datum);
-        
       }
       console.log(sorted);
       return sorted;
@@ -62,6 +58,7 @@ class App extends Component {
 
   render() {
     return (
+      <MuiThemeProvider>
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
@@ -71,11 +68,11 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <div>
-          <SideWidget onChartUpdate={this.handleGraphicsUpdate}></SideWidget>
+          <SideFrame onChartUpdate={this.handleGraphicsUpdate}></SideFrame>
           <MainFrame XAxisKey="time" YAxisKey="volume" chartData={this.state.chartData}></MainFrame>
         </div>
       </div>
-      
+      </MuiThemeProvider>
     );
   }
 }

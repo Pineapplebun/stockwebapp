@@ -5,11 +5,10 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
-const main = require('./main');
 const fs = require('fs');
 
 var app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3000;
 
 // use the public folder files as the client side files needed
 app.use(express.static('build'));
@@ -32,41 +31,25 @@ function myLogger(req, res, next) {
 
 app.use(myLogger);
 
-// GET request for a stock symbol
-app.get('/', function(req, res) {
-    res.sendFile('./build/index.html');
-})
+var index = require('./routes/index');
+var watchlist = require('./routes/watchlist');
+// var users = require('./routes/users')
 
-// POST request for a given user and password
-// TODO:
-
-// POST request to add a stock to the watchlist
-// Example: localhost:3000/watchlist/add?symbol=amd
-app.get('/watchlist/add', function(req, res) {
-    res.send(`added ${req.query.symbol} to watchlist`);
-})
-
-// GET request for the graph data
-// console.log(req.params.symbol)
-// main.getCollection(req, (data) => res.json(data))
-// Example localhost:3000/amd?start=2017-12-01&end=2018-01-30
-app.get('/:symbol', function(req, res) {
-    let msg = {start: req.query.start, end: req.query.end, symbol: req.params.symbol};
-    main.getIntervalCollection(msg, (data) => res.json(data));
-})
+app.use('/', index);
+app.use('/watchlist', watchlist);
 
 // Start Listening
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
-/*
+
+/*HTTPS for later...
+
 const options = {
     cert: fs.readFileSync('./localhost.crt'),
     key: fs.readFileSync('./localhost.key')
 };
-
 const server = https.createServer(options, app);
-
 server.listen(8001, function(){
     console.log("server running at https://localhost:8001/")
 });*/

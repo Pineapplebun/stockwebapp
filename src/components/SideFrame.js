@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
-import './SideWidget.css';
-export class SideWidget extends Component {
+import {GridList, GridTile} from 'material-ui/GridList';
+import {List, ListItem} from 'material-ui/List';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
+//import DatePicker from 'material-ui/DatePicker';
+import './SideFrame.css';
+export class SideFrame extends Component {
     constructor(props) {
         super(props)
 
@@ -10,7 +15,8 @@ export class SideWidget extends Component {
             endDate: '',
             text: '',
             rates: {},
-            selStock: ''
+            selStock: '',
+            open: true
         }
         // Need to bind handlers to the enclosing object "this"
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -61,18 +67,20 @@ export class SideWidget extends Component {
                 <button onClick={this.handleChartUpdate}>
                     Press me to show the Visual
                 </button>
-                <StockList
-                    onSelectStock={this.handleSelectStock}
-                    items={this.state.items}
-                    rates={this.state.rates}
-                />
-                <form onSubmit={this.handleSubmit}>
-                    <input
-                        onChange={this.handleTextBox}
-                        value={this.state.text}
+                <Drawer open={this.state.open}>
+                    <StockList
+                        onSelectStock={this.handleSelectStock}
+                        items={this.state.items}
+                        rates={this.state.rates}
                     />
-                    <button>Add to Watchlist</button>
-                </form>
+                    <form onSubmit={this.handleSubmit}>
+                        <input
+                            onChange={this.handleTextBox}
+                            value={this.state.text}
+                        />
+                        <button>Add to Watchlist</button>
+                    </form>
+                </Drawer>
             </div>
         )
     }
@@ -132,25 +140,11 @@ class StockList extends React.Component {
     }
     render() {
       return (
-        <ul>
+        <List>
           {this.props.items.map(item => (
-            <Item onClick={this.handleClick} key={item.id} text={item.text} price={this.props.rates[item.text]} />
+            <MenuItem onClick={this.handleClick} primaryText={item.text} key={item.id} text={item.text} price={this.props.rates[item.text]} />
           ))}
-        </ul>
+        </List>
       );
     }
-}
-
-function Item(props) {
-    return (
-        <li>
-            <div >
-                <label class="switch">
-                    <input type="checkbox" value={props.text} onClick={props.onClick}/>
-                    <span class="slider round"></span>
-                </label>
-                {props.text}
-            </div>
-        </li>
-    )
 }
