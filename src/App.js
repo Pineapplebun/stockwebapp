@@ -23,7 +23,7 @@ class App extends Component {
       // Fetch from our server the stock data
       // Save this data in this.state.chartInfo
       console.log(e);
-      fetch(`http://localhost:3000/watchlist/${e.symbol}?start=${e.startDate}&end=${e.endDate}`)
+      fetch(`http://stockvisualizerwebapp.herokuapp.com/watchlist/${e.symbol}?start=${e.startDate}&end=${e.endDate}`)
       .then(response => { 
           if (response.ok) {
               return response.json();
