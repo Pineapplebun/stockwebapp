@@ -3,7 +3,7 @@ const router = express.Router();
 
 // GET request for the home page
 router.get('/', function(req, res) {
-    res.sendFile('../build/index.html');
+    res.sendFile('index.html', { root: path.join(__dirname, '..', 'build') });
 });
 
 module.exports = router;
