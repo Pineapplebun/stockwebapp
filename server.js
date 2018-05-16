@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
+const cors = require('cors');
 
 var app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,7 @@ function myLogger(req, res, next) {
 }
 
 app.use(myLogger);
+app.use(cors());
 
 var index = require('./routes/index');
 var watchlist = require('./routes/watchlist');

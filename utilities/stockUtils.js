@@ -72,7 +72,8 @@ function getIntervalCollection(req) {
                 }
             }
             resolve(interval);
-            }, (err) => {
+            return;
+            }).catch(err => {
                 reject(e);
             });
     })
