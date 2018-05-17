@@ -6,15 +6,6 @@ import { SideFrame } from './components/SideFrame.js';
 import { MainFrame } from './components/MainFrame.js';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chartInfo: {},
-      chartData: [],
-      newsData: []
-    };
-  }
-
   render() {
     return (
       <MuiThemeProvider>
@@ -25,7 +16,7 @@ class App extends Component {
           </header>
           <p className="App-intro">
             Purpose: To visualize and play around with stock data.
-        </p>
+          </p>
           <div>
             <SideFrame></SideFrame>
             <MainFrame></MainFrame>

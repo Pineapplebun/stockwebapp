@@ -7,10 +7,10 @@ export class MainFrame extends Component {
   // The Main Frame has more than just the chart
   render() {
     const data = handleChartSort(this.props.chartData);
-    var XAxisKey = this.props.chartOptions.XAxisKey;
-    var YAxisKey = this.props.chartOptions.YAxisKey;
-    XAxisKey="time";
-    YAxisKey="volume";
+    //var XAxisKey = this.props.chartOptions.XAxisKey;
+    //var YAxisKey = this.props.chartOptions.YAxisKey;
+    var XAxisKey="time";
+    var YAxisKey="volume";
     return (
       <LineChart width={1000} height={1000} data={data}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -54,4 +54,4 @@ const handleChartSort = (chartData) => {
   }
 }
 
-export default connect(mapStateToProps, {  })(MainFrame);
+export default connect(mapStateToProps, {})(MainFrame);

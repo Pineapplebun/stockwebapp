@@ -22,12 +22,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         chartOptions: action.payload,
-      }
+      };
     case SELECT_STOCK:
       return {
         ...state,
         selectStock: action.payload,
-      }
+      };
     default:
       return state;
   }

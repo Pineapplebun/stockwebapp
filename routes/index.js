@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
 // GET request for the home page
 router.get('/', function(req, res) {

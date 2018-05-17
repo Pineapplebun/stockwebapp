@@ -6,7 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
 import './SideFrame.css';
 import { connect } from 'react-redux';
-import { updateOptions, fetchChart, selectStock } from '../actions/chartActions.js';
+import { updateOptions, fetchChart, selectStock } from '../actions/chartActions';
 import PropTypes from 'prop-types';
 
 export class SideFrame extends Component {
@@ -15,11 +15,13 @@ export class SideFrame extends Component {
 
     this.state = {
       items: [],
-      minDate: '',
-      maxDate: '',
+      minDate: new Date(),
+      maxDate: new Date(),
       text: '',
       rates: {},
-      open: true
+      open: true,
+      autoOk: false,
+      disableYearSelection: false,
     }
     // Need to bind handlers to the enclosing object "this"
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -52,12 +54,14 @@ export class SideFrame extends Component {
               autoOk={this.state.autoOk}
               floatingLabelText="Min Date"
               defaultDate={this.state.minDate}
+              disableYearSelection={this.state.disableYearSelection}
             />
             <DatePicker
               onChange={this.handleChangeMaxDate}
               autoOk={this.state.autoOk}
               floatingLabelText="Max Date"
               defaultDate={this.state.maxDate}
+              disableYearSelection={this.state.disableYearSelection}
             />
           </div>
           <button onClick={this.handleChartUpdate}>
@@ -76,10 +80,12 @@ export class SideFrame extends Component {
   // calls the action for fetching the stock data
   // the data will be stored in the redux store
   handleChartUpdate(e) {
+    //console.log(this.props);
+    //console.log(this.state);
     this.props.fetchChart({
-      symbol: this.state.selStock,
-      minDate: this.state.minDate,
-      maxDate: this.state.maxDate,
+      symbol: this.props.selectedStock,
+      minDate: this.state.minDate.toISOString().split('T')[0],
+      maxDate: this.state.maxDate.toISOString().split('T')[0],
     })
   }
 
@@ -102,21 +108,22 @@ export class SideFrame extends Component {
       text: ''
     }))
   }
-  handleChangeMinDate(e) {
+  handleChangeMinDate(e, date) {
     this.setState(
-      { minDate: e.target.value }
+      { minDate: date }
     )
   }
-  handleChangeMaxDate(e) {
+  handleChangeMaxDate(e, date) {
     this.setState(
-      { maxDate: e.target.value }
+      { maxDate: date }
     )
   }
 
   // callback for the select stock in StockList
-  handleSelectStock(s) {
+  handleSelectStock(e) {
     // add the value to our redux store
-    this.props.selectStock(s);
+    // console.log(this.props)
+    this.props.selectStock(e.target.primaryText);
   }
 }
 
@@ -138,6 +145,7 @@ SideFrame.propTypes = {
   updateOptions: PropTypes.func.isRequired,
   selectStock: PropTypes.func.isRequired,
   selectedStock: PropTypes.string.isRequired,
+  chartOptions: PropTypes.object.isRequired,
 }
 
 /*
