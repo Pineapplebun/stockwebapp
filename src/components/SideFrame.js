@@ -33,9 +33,11 @@ export class SideFrame extends Component {
   }
 
   render() {
+    //console.log(Object.keys(this.props).length === 0);
     const optionsStyle = {
-      maxWidth: 255,
+      maxWidth: 100,
       marginRight: 'auto',
+      padding: '20px',
     };
     return (
       <div>
@@ -80,8 +82,7 @@ export class SideFrame extends Component {
   // calls the action for fetching the stock data
   // the data will be stored in the redux store
   handleChartUpdate(e) {
-    //console.log(this.props);
-    //console.log(this.state);
+    console.log('selectedStock', this.props.selectedStock);
     this.props.fetchChart({
       symbol: this.props.selectedStock,
       minDate: this.state.minDate.toISOString().split('T')[0],
@@ -122,8 +123,7 @@ export class SideFrame extends Component {
   // callback for the select stock in StockList
   handleSelectStock(e) {
     // add the value to our redux store
-    // console.log(this.props)
-    this.props.selectStock(e.target.primaryText);
+    this.props.selectStock(e.target.textContent);
   }
 }
 
@@ -156,5 +156,11 @@ const mapStateToProps = state => ({
   selectedStock: state.chart.selectStock,
   chartOptions: state.chart.chartOptions,
 })
+/*
+const mapDispatchToProps = dispatch => ({
+  fetchChart: msg => dispatch(fetchChart(msg)),
+  selectStock: stock => dispatch(selectStock(stock)),
+  updateOptions: options => dispatch(updateOptions(options)),
+})*/
 
-export default connect(mapStateToProps, { updateOptions, fetchChart, selectStock })(SideFrame);
+export default connect(mapStateToProps, {fetchChart, selectStock, updateOptions})(SideFrame);

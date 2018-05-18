@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { LineChart, Line, XAxis, YAxis } from 'recharts';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import './MainFrame.css';
 
 export class MainFrame extends Component {
   // The Main Frame has more than just the chart
@@ -12,12 +13,16 @@ export class MainFrame extends Component {
     var XAxisKey="time";
     var YAxisKey="volume";
     return (
-      <LineChart width={1000} height={1000} data={data}
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <XAxis datakey={XAxisKey} />
-        <YAxis />
-        <Line type="monotone" dataKey={YAxisKey} stroke="#8884d8" />
-      </LineChart>
+      <div >
+        <div id="LineChart">
+          <LineChart width={1000} height={1000} data={data}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <XAxis datakey={XAxisKey} />
+            <YAxis />
+            <Line type="monotone" dataKey={YAxisKey} stroke="#8884d8" />
+          </LineChart>
+        </div>
+      </div>
     )
   }
 }

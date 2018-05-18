@@ -30,6 +30,7 @@ export const updateOptions = (updateData) => {
 }
 
 export const selectStock = (selectStock) => {
+  console.log(selectStock);
   return function (dispatch) {
     dispatch({
       type: SELECT_STOCK,

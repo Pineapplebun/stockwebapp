@@ -10,6 +10,7 @@ const initialState = {
   }
 };
 
+/** Never mutating state, simply return a new state object */
 export default function (state = initialState, action) {
   switch (action.type) {
     case FETCH_CHART:
@@ -24,6 +25,7 @@ export default function (state = initialState, action) {
         chartOptions: action.payload,
       };
     case SELECT_STOCK:
+      console.log(...state);
       return {
         ...state,
         selectStock: action.payload,

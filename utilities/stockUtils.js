@@ -29,69 +29,72 @@ const fs = require("fs")
 */
 
 module.exports = {
-    getCollection: getCollection,
-    getIntervalCollection: getIntervalCollection
+  getCollection: getCollection,
+  getIntervalCollection: getIntervalCollection
 }
 
 var timeSeries = 'TIME_SERIES_DAILY';
 var apiKeyAV = fs.readFileSync("./utilities/stockapi.txt");
 
 function getCollection(req) {
-    return new Promise(function(resolve, reject) {
-        var urlAV = `https://www.alphavantage.co/query?function=${timeSeries}&symbol=${req.symbol}&apikey=${apiKeyAV}`;
-        https.get(urlAV, (res) => {
-            // data is requested is buffered
-            let data = '';
-            res.on('data', (chunk) => {data += chunk});
-            res.on('end', () => {resolve(array(data))});
-            
-        })
-        .on('error', (e) => {reject(Error(e));});
+  return new Promise(function (resolve, reject) {
+    var urlAV = `https://www.alphavantage.co/query?function=${timeSeries}&symbol=${req.symbol}&apikey=${apiKeyAV}`;
+    https.get(urlAV, (res) => {
+      // data is requested is buffered
+      let data = '';
+      res.on('data', (chunk) => { data += chunk });
+      res.on('end', () => {
+        try {
+          resolve(array(data));
+        } catch(e) {
+          reject(e);
+        }
+      });
     })
+    .on('error', (e) => { reject(e); });
+  })
 }
 
 function getIntervalCollection(req) {
-    return new Promise(function(resolve, reject) {
-        let startDate;
-        let endDate;
-        try {
-            startDate = new Date(req.start);
-            endDate = new Date(req.end);
-        } catch (e) {
-            reject(e);
-            throw e;
+  return new Promise(function (resolve, reject) {
+    let startDate;
+    let endDate;
+    try {
+      startDate = new Date(req.start);
+      endDate = new Date(req.end);
+    } catch(err) {
+      reject(err);
+    }
+    getCollection(req).then((data) => {
+      let arrSeries = data;
+      let interval = [];
+      for (let timepoint of arrSeries) {
+        let date = Object.keys(timepoint)[0];
+        let stockDate = new Date(date);
+        if (startDate <= stockDate && stockDate <= endDate) {
+          interval.push(timepoint);
         }
-        getCollection(req).then((data) => {
-            let arrSeries = data;
-            let interval = [];
-            for (let timepoint of arrSeries) {
-                let date = Object.keys(timepoint)[0];
-                let stockDate = new Date(date);
-                if (startDate <= stockDate && stockDate <= endDate) {
-                    interval.push(timepoint);
-                }
-            }
-            resolve(interval);
-            return;
-            }).catch(err => {
-                reject(e);
-            });
-    })
+      }
+      resolve(interval);
+    }, (err) => {
+      reject(err);
+    });
+  })
 }
 
 function array(data) {
-    try {
-        let json = JSON.parse(data);
-        let daily = json["Time Series (Daily)"];
-        let arr = [];
-        for (let date in daily) {
-            let newObj = {};
-            newObj[date] = daily[date];
-            arr.push(newObj);
-        }
-        return arr;
-    } catch(e) {
-        throw Error(e);
+  try {
+    let json = JSON.parse(data);
+    let daily = json["Time Series (Daily)"];
+    let arr = [];
+    for (let date in daily) {
+      let newObj = {};
+      newObj[date] = daily[date];
+      arr.push(newObj);
     }
+    return arr;
+  } catch (e) {
+    throw e;
+  }
 }
 
