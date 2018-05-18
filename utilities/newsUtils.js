@@ -13,7 +13,7 @@ function getNews(req) {
     return new Promise(
         function(resolve, reject) {
             // do stuff here
-            var url = `https://newsapi.org/v2/everything?q=${req.symbol+"+stock"}&from=${req.start}&to=${req.end}&sortby=popularity&apiKey=${apiKey}`
+            var url = `https://newsapi.org/v2/everything?q=${req.symbol}&from=${req.start}&to=${req.end}&sortby=popularity&apiKey=${apiKey}`
             https.get(url, (res) => {
                 // data is requested is buffered
                 let data = '';
@@ -34,6 +34,6 @@ function array(data) {
         let json = JSON.parse(data);
         return json["articles"]; // array
     } catch(e) {
-        throw Error(e);
+        return Error(e);
     }
 }

@@ -19,18 +19,19 @@ app.use(cookieParser('my very well kept secret'));
 
 // Adding in our own middleware logger
 function myLogger(req, res, next) {
-    console.log('Raw Cookies: ', req.headers.cookie);
-    console.log('Cookie Parser: ', req.cookies);
-    console.log('Signed Cookies: ', req.signedCookies);
-    if (req.body) {
-        console.log('LOG:', req.method, req.url, req.body);
-    }
-    // Add something to the header field
-    res.append('Set-Cookie', `lastPage= ${req.url}`);
-    next();
+  console.log('Raw Cookies: ', req.headers.cookie);
+  console.log('Cookie Parser: ', req.cookies);
+  console.log('Signed Cookies: ', req.signedCookies);
+  if (req.body) {
+    console.log('LOG:', req.method, req.url, req.body);
+  }
+  // Add something to the header field
+  res.append('Set-Cookie', `lastPage= ${req.url}`);
+  next();
 }
 
 app.use(myLogger);
+app.use(cors());
 
 var index = require('./routes/index');
 var watchlist = require('./routes/watchlist');
@@ -43,7 +44,7 @@ app.use('/watchlist', watchlist);
 
 // Start Listening
 app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });
 
 /*HTTPS for later...
