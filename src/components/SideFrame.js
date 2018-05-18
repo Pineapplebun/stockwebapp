@@ -1,150 +1,166 @@
 import React, { Component } from 'react';
-import {GridList, GridTile} from 'material-ui/GridList';
-import {List, ListItem} from 'material-ui/List';
+import { GridList, GridTile } from 'material-ui/GridList';
+import { List, ListItem } from 'material-ui/List';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
-//import DatePicker from 'material-ui/DatePicker';
+import DatePicker from 'material-ui/DatePicker';
 import './SideFrame.css';
+import { connect } from 'react-redux';
+import { updateOptions, fetchChart, selectStock } from '../actions/chartActions';
+import PropTypes from 'prop-types';
+
 export class SideFrame extends Component {
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props)
 
-        this.state = {
-            items: [],
-            startDate: '',
-            endDate: '',
-            text: '',
-            rates: {},
-            selStock: '',
-            open: true
-        }
-        // Need to bind handlers to the enclosing object "this"
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleStartDateChange = this.handleStartDateChange.bind(this)
-        this.handleEndDateChange = this.handleEndDateChange.bind(this)
-        this.handleSelectStock = this.handleSelectStock.bind(this)
-        this.handleChartUpdate = this.handleChartUpdate.bind(this)
-        this.handleTextBox = this.handleTextBox.bind(this)
+    this.state = {
+      items: [],
+      minDate: new Date(),
+      maxDate: new Date(),
+      text: '',
+      rates: {},
+      open: true,
+      autoOk: false,
+      disableYearSelection: false,
     }
+    // Need to bind handlers to the enclosing object "this"
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChangeMinDate = this.handleChangeMinDate.bind(this);
+    this.handleChangeMaxDate = this.handleChangeMaxDate.bind(this);
+    this.handleSelectStock = this.handleSelectStock.bind(this);
+    this.handleChartUpdate = this.handleChartUpdate.bind(this);
+    this.handleTextBox = this.handleTextBox.bind(this);
+  }
 
-    // calls the callback for the parent of SideWidget
-    handleChartUpdate(e) {
-        console.log(this);
-        this.props.onChartUpdate({
-            startDate: this.state.startDate,
-            endDate: this.state.endDate,
-            symbol: this.state.selStock
-        })
-    }
-
-    // callback for the select stock in StockList
-    handleSelectStock(e) {
-        const s = e;
-        this.setState({selStock: s});
-        console.log(this);
-    }
-
-    // render the sidebar html
-    render() {
-        //const selStock = this.state.selStock
-        //const chartInfo = this.props.chartInfo;
-        return (
-            <div>
-                <h3> Options
-                    <div>Start Date
-                        <DatePicker 
-                        currentDate={this.state.startDate}
-                        dateChange={this.handleStartDateChange}
-                        />
-                    </div>
-                    <div>End Date
-                        <DatePicker 
-                        currentDate={this.state.endDate}
-                        dateChange={this.handleEndDateChange}
-                        />
-                    </div>
-                </h3>
-                <button onClick={this.handleChartUpdate}>
-                    Press me to show the Visual
-                </button>
-                <Drawer open={this.state.open}>
-                    <StockList
-                        onSelectStock={this.handleSelectStock}
-                        items={this.state.items}
-                        rates={this.state.rates}
-                    />
-                    <form onSubmit={this.handleSubmit}>
-                        <input
-                            onChange={this.handleTextBox}
-                            value={this.state.text}
-                        />
-                        <button>Add to Watchlist</button>
-                    </form>
-                </Drawer>
-            </div>
-        )
-    }
-
-    handleTextBox(e) {
-        this.setState({text: e.target.value})
-    }
-    
-    handleSubmit(e) {
-        e.preventDefault();
-        if (!this.state.text.length) {
-            return;
-        }
-        const newItem = {
-            text: this.state.text,
-            id: Date.now(),
-            rate: this.state.rates[this.state.text]
-        }
-        this.setState(prevState => ({
-            items: prevState.items.concat(newItem),
-            text:''
-        }))
-    }
-
-    handleStartDateChange(e) {
-        this.setState(
-            {startDate: e.target.value}
-        )
-    }
-    handleEndDateChange(e) {
-        this.setState(
-            {endDate: e.target.value}
-        )
-    }
-}
-
-class DatePicker extends React.Component {
-    render() {
-        return (
+  render() {
+    //console.log(Object.keys(this.props).length === 0);
+    const optionsStyle = {
+      maxWidth: 100,
+      marginRight: 'auto',
+      padding: '20px',
+    };
+    return (
+      <div>
+        <Drawer open={this.state.open}>
+          <form onSubmit={this.handleSubmit}>
             <input
-                value={this.props.currentDate}
-                onChange={this.props.dateChange}
+              onChange={this.handleTextBox}
+              value={this.state.text}
             />
-        )
+            <button>Add to Watchlist</button>
+          </form>
+          <h3> Chart Options</h3>
+          <div style={optionsStyle}>
+            <DatePicker
+              onChange={this.handleChangeMinDate}
+              autoOk={this.state.autoOk}
+              floatingLabelText="Min Date"
+              defaultDate={this.state.minDate}
+              disableYearSelection={this.state.disableYearSelection}
+            />
+            <DatePicker
+              onChange={this.handleChangeMaxDate}
+              autoOk={this.state.autoOk}
+              floatingLabelText="Max Date"
+              defaultDate={this.state.maxDate}
+              disableYearSelection={this.state.disableYearSelection}
+            />
+          </div>
+          <button onClick={this.handleChartUpdate}>
+            Update Chart
+          </button>
+          <StockList
+            onSelectStock={this.handleSelectStock}
+            items={this.state.items}
+            rates={this.state.rates}
+          />
+        </Drawer>
+      </div>
+    );
+  }
+
+  // calls the action for fetching the stock data
+  // the data will be stored in the redux store
+  handleChartUpdate(e) {
+    console.log('selectedStock', this.props.selectedStock);
+    this.props.fetchChart({
+      symbol: this.props.selectedStock,
+      minDate: this.state.minDate.toISOString().split('T')[0],
+      maxDate: this.state.maxDate.toISOString().split('T')[0],
+    })
+  }
+
+  handleTextBox(e) {
+    this.setState({ text: e.target.value });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    if (!this.state.text.length) {
+      return;
     }
+    const newItem = {
+      text: this.state.text,
+      id: Date.now(),
+      rate: this.state.rates[this.state.text]
+    }
+    this.setState(prevState => ({
+      items: prevState.items.concat(newItem),
+      text: ''
+    }))
+  }
+  handleChangeMinDate(e, date) {
+    this.setState(
+      { minDate: date }
+    )
+  }
+  handleChangeMaxDate(e, date) {
+    this.setState(
+      { maxDate: date }
+    )
+  }
+
+  // callback for the select stock in StockList
+  handleSelectStock(e) {
+    // add the value to our redux store
+    this.props.selectStock(e.target.textContent);
+  }
 }
 
 // Make sure you can explain how the map works.
 class StockList extends React.Component {
-    constructor(props) {
-        super(props)
-        this.handleClick = this.handleClick.bind(this)
-    }
-    handleClick(e) {
-        // console.log(e.target.value);
-        this.props.onSelectStock(e.target.value);
-    }
-    render() {
-      return (
-        <List>
-          {this.props.items.map(item => (
-            <MenuItem onClick={this.handleClick} primaryText={item.text} key={item.id} text={item.text} price={this.props.rates[item.text]} />
-          ))}
-        </List>
-      );
-    }
+  render() {
+    return (
+      <List>
+        {this.props.items.map(item => (
+          <MenuItem onClick={this.props.onSelectStock} primaryText={item.text} key={item.id} text={item.text} price={this.props.rates[item.text]} />
+        ))}
+      </List>
+    );
+  }
 }
+
+SideFrame.propTypes = {
+  fetchChart: PropTypes.func.isRequired,
+  updateOptions: PropTypes.func.isRequired,
+  selectStock: PropTypes.func.isRequired,
+  selectedStock: PropTypes.string.isRequired,
+  chartOptions: PropTypes.object.isRequired,
+}
+
+/*
+This will map props.chartData to the reducer function chartReducer state
+*/
+const mapStateToProps = state => ({
+  // define the props for the SideFrame component
+  selectedStock: state.chart.selectStock,
+  chartOptions: state.chart.chartOptions,
+})
+/*
+const mapDispatchToProps = dispatch => ({
+  fetchChart: msg => dispatch(fetchChart(msg)),
+  selectStock: stock => dispatch(selectStock(stock)),
+  updateOptions: options => dispatch(updateOptions(options)),
+})*/
+
+export default connect(mapStateToProps, {fetchChart, selectStock, updateOptions})(SideFrame);
