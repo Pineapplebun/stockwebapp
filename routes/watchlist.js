@@ -28,6 +28,7 @@ router.get('/:symbol', function(req, res) {
         res.json(json);
     }, (err) => {
         console.log(err);
+        res.json(err);
     })
 })
 
