@@ -13,15 +13,13 @@ export class MainFrame extends Component {
     var XAxisKey="time";
     var YAxisKey="volume";
     return (
-      <div >
-        <div id="LineChart">
-          <LineChart width={1000} height={1000} data={data}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <XAxis datakey={XAxisKey} />
-            <YAxis />
-            <Line type="monotone" dataKey={YAxisKey} stroke="#8884d8" />
-          </LineChart>
-        </div>
+      <div id="LineChart">
+        <LineChart width={500} height={500} data={data}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <XAxis datakey={XAxisKey} />
+          <YAxis />
+          <Line type="monotone" dataKey={YAxisKey} stroke="#8884d8" />
+        </LineChart>
       </div>
     )
   }
