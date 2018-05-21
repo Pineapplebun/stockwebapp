@@ -34,7 +34,7 @@ module.exports = {
 }
 
 var timeSeries = 'TIME_SERIES_DAILY';
-var apiKeyAV = fs.readFileSync("./utilities/stockapi.txt");
+var apiKeyAV = process.env.STOCK_API;
 
 function getCollection(req) {
   return new Promise(function (resolve, reject) {

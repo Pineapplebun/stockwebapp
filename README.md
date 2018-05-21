@@ -5,8 +5,9 @@
 export STOCK_API="..."
 export NEWS_API="..."
 export DATABASE_URL="..."
+export WATCHLIST_API_URL="..."
 
-by running the setup.sh script.
+by modifying and running 'source setup.sh'.
 
 ## Build the React Application
 

@@ -44,15 +44,3 @@ app.use('/watchlist', watchlist);
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
-/*HTTPS for later...
-
-const options = {
-    cert: fs.readFileSync('./localhost.crt'),
-    key: fs.readFileSync('./localhost.key')
-};
-const server = https.createServer(options, app);
-server.listen(8001, function(){
-    console.log("server running at https://localhost:8001/")
-});*/
-

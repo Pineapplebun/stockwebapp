@@ -1,7 +1,8 @@
 import { FETCH_CHART, CHART_OPTIONS, SELECT_STOCK } from './types';
+import { watchlistURL } from './serverCalls';
 
 export const fetchChart = (queryData) => dispatch => {
-  fetch(`http://localhost:3000/watchlist/${queryData.symbol}?start=${queryData.minDate}&end=${queryData.maxDate}`)
+  fetch(`${watchlistURL}${queryData.symbol}?start=${queryData.minDate}&end=${queryData.maxDate}`)
     .then(response => {
       if (response.ok) {
         return response.json();
