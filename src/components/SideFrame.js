@@ -42,6 +42,7 @@ export class SideFrame extends Component {
     return (
       <div>
         <Drawer open={this.state.open}>
+          <h3> Enter a stock symbol: </h3>
           <form onSubmit={this.handleSubmit}>
             <input
               onChange={this.handleTextBox}
@@ -69,6 +70,7 @@ export class SideFrame extends Component {
           <button onClick={this.handleChartUpdate}>
             Update Chart
           </button>
+          <h3> Watchlist </h3>
           <StockList
             onSelectStock={this.handleSelectStock}
             items={this.state.items}

@@ -1,6 +1,7 @@
 const https = require("https");
 const fs = require("fs");
-var apiKey = fs.readFileSync("./utilities/newsapi.txt");
+
+var apiKey = process.env.NEWS_API;
 
 module.exports = {
     getNews: getNews,

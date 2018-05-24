@@ -9,16 +9,20 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider>
-        <div className="grid-container">
-          <header className="App-header">
+        <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">Stock Chart Visualizer</h1>
-            <p className="App-intro">
-            Purpose: To visualize and play around with stock data.
-            </p>
-          </header>
+            <h1 className="App-title">Stock Chart Visualizer
+              <p className="App-intro">
+                You can add stocks to a watchlist and visualize stock data.
+              </p>
+            </h1>
+        </header>
+        <div className="grid-container">
           <SideFrame className="sideframe"></SideFrame>
           <MainFrame className="mainframe"></MainFrame>
+          <div className="detailframe"> 
+            <h3> News Headlines </h3> 
+          </div>
         </div>
       </MuiThemeProvider>
     );
