@@ -37,6 +37,8 @@ var index = require('./routes/index');
 var watchlist = require('./routes/watchlist');
 // var users = require('./routes/users')
 
+app.use(cors());
+
 app.use('/', index);
 app.use('/watchlist', watchlist);
 
