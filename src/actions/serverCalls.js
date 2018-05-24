@@ -1,1 +1,1 @@
-export const watchlistURL = "http://localhost:3000/watchlist/";
+export const watchlistURL = "http://stockvisualizerwebapp.com/watchlist/";
