@@ -1,6 +1,3 @@
-const https = require("https")
-const fs = require("fs")
-
 // Stock API for daily series
 /* Example format for daily series
 {
@@ -27,7 +24,7 @@ const fs = require("fs")
             "5. volume": "24242019"
         },
 */
-
+const https = require("https");
 module.exports = {
   getCollection: getCollection,
   getIntervalCollection: getIntervalCollection
