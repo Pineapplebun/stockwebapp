@@ -40,44 +40,43 @@ export class SideFrame extends Component {
       padding: '20px',
     };
     return (
-      <div>
-        <Drawer open={this.state.open}>
-          <h3> Enter a stock symbol: </h3>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              onChange={this.handleTextBox}
-              value={this.state.text}
-            />
-            <button>Add to Watchlist</button>
-          </form>
-          <h3> Chart Options</h3>
-          <div style={optionsStyle}>
-            <DatePicker
-              onChange={this.handleChangeMinDate}
-              autoOk={this.state.autoOk}
-              floatingLabelText="Min Date"
-              defaultDate={this.state.minDate}
-              disableYearSelection={this.state.disableYearSelection}
-            />
-            <DatePicker
-              onChange={this.handleChangeMaxDate}
-              autoOk={this.state.autoOk}
-              floatingLabelText="Max Date"
-              defaultDate={this.state.maxDate}
-              disableYearSelection={this.state.disableYearSelection}
-            />
-          </div>
-          <button onClick={this.handleChartUpdate}>
-            Update Chart
-          </button>
-          <h3> Watchlist </h3>
-          <StockList
-            onSelectStock={this.handleSelectStock}
-            items={this.state.items}
-            rates={this.state.rates}
+      <Drawer open={this.state.open}>
+        <h3> Enter a stock symbol: </h3>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            onChange={this.handleTextBox}
+            value={this.state.text}
           />
-        </Drawer>
-      </div>
+          <button>Add to Watchlist</button>
+        </form>
+        <h3> Chart Options</h3>
+        <div style={optionsStyle}>
+          <DatePicker
+            onChange={this.handleChangeMinDate}
+            autoOk={this.state.autoOk}
+            floatingLabelText="Min Date"
+            defaultDate={this.state.minDate}
+            disableYearSelection={this.state.disableYearSelection}
+          />
+          <DatePicker
+            onChange={this.handleChangeMaxDate}
+            autoOk={this.state.autoOk}
+            floatingLabelText="Max Date"
+            defaultDate={this.state.maxDate}
+            disableYearSelection={this.state.disableYearSelection}
+          />
+        </div>
+        <button onClick={this.handleChartUpdate}>
+          Update Chart
+        </button>
+        <h3> Watchlist </h3>
+        <StockList
+          onSelectStock={this.handleSelectStock}
+          items={this.state.items}
+          rates={this.state.rates}
+        />
+      </Drawer>
+
     );
   }
 
