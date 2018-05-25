@@ -24,9 +24,13 @@
             "5. volume": "24242019"
         },
 */
+<<<<<<< HEAD
 
 const https = require("https");
 
+=======
+const https = require("https");
+>>>>>>> 080012b01772829defde493f0c3841b135027331
 module.exports = {
   getCollection: getCollection,
   getIntervalCollection: getIntervalCollection
