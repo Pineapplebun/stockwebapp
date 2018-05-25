@@ -5,7 +5,6 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
-const fs = require('fs');
 const cors = require('cors');
 
 var app = express();
