@@ -1,3 +1,18 @@
-# Production Branch
+# Setup
 
-This is the branch used to push changes to the Heroku remote and merge changes from master.
+## Export environmental variables for API keys:
+
+export STOCK_API="..."
+export NEWS_API="..."
+export DATABASE_URL="..."
+export WATCHLIST_API_URL="..."
+
+by modifying and running 'source setup.sh'.
+
+## Build the React Application
+
+npm run build
+
+## Run server.js
+
+node server.js
