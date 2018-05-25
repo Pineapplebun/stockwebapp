@@ -50,9 +50,9 @@
   grid-area: menu;
 }
 
-.detailframe {
+.newsframe {
   grid-area: right;
-  background-color: white;
+  max-width: 30%;
 }
 
 @keyframes App-logo-spin {
