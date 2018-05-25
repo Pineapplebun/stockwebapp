@@ -1,6 +1,4 @@
 const https = require("https");
-const fs = require("fs");
-
 var apiKey = process.env.NEWS_API;
 
 module.exports = {
