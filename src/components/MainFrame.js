@@ -15,7 +15,7 @@ export class MainFrame extends Component {
     return (
       <div id="LineChart">
         <LineChart width={500} height={500} data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          margin={{ top: 30, right: 30, left: 50, bottom: 30 }}>
           <XAxis datakey={XAxisKey} />
           <YAxis />
           <Line type="monotone" dataKey={YAxisKey} stroke="#8884d8" />
@@ -27,7 +27,6 @@ export class MainFrame extends Component {
 
 MainFrame.propTypes = {
   chartData: PropTypes.array.isRequired,
-  newsData: PropTypes.array.isRequired,
   chartOptions: PropTypes.object.isRequired,
 }
 
@@ -36,7 +35,6 @@ This will map props.chartData to the reducer function chartReducer state
 */
 const mapStateToProps = state => ({
   chartData: state.chart.chartData,
-  newsData: state.chart.newsData,
   chartOptions: state.chart.chartOptions,
 })
 
