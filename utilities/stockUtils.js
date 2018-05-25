@@ -44,6 +44,7 @@ function getCollection(req) {
       res.on('data', (chunk) => { data += chunk });
       res.on('end', () => {
         try {
+          console.log(data);
           resolve(array(data));
         } catch(e) {
           reject(e);

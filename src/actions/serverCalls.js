@@ -1,1 +1,2 @@
-export const watchlistURL = "http://localhost:3000/watchlist/";
+export const watchlistURL = "https://stockvisualizerwebapp.herokuapp.com/watchlist/";
+

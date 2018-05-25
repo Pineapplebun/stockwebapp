@@ -40,7 +40,6 @@ export class SideFrame extends Component {
       padding: '20px',
     };
     return (
-
       <Drawer open={this.state.open}>
         <h3> Enter a stock symbol: </h3>
         <form onSubmit={this.handleSubmit}>
