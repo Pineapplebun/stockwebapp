@@ -1,4 +1,3 @@
-// Stock API for daily series
 /* Example format for daily series
 {
     "Meta Data": {
@@ -44,7 +43,6 @@ function getCollection(req) {
       res.on('data', (chunk) => { data += chunk });
       res.on('end', () => {
         try {
-          console.log(data);
           resolve(array(data));
         } catch(e) {
           reject(e);

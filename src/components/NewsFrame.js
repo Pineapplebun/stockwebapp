@@ -26,4 +26,4 @@ const mapStateToProps = state => ({
   newsData: state.chart.newsData,
 })
 
-export default connect(mapStateToProps ,{})(NewsFrame);
+export default connect(mapStateToProps , {})(NewsFrame);

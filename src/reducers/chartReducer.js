@@ -25,7 +25,6 @@ export default function (state = initialState, action) {
         chartOptions: action.payload,
       };
     case SELECT_STOCK:
-      console.log(...state);
       return {
         ...state,
         selectStock: action.payload,
