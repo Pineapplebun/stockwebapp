@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const stockUtils = require('../utilities/stockUtils');
 const newsUtils = require('../utilities/newsUtils');
 
@@ -15,8 +15,6 @@ router.get('/add/:symbol', function (req, res) {
 })
 
 // GET request for the graph data
-// console.log(req.params.symbol)
-// main.getCollection(req, (data) => res.json(data))
 // Example localhost:3000/watchlist/amd?start=2017-12-01&end=2018-01-30
 router.get('/:symbol', function (req, res) {
   let msg = { start: req.query.start, end: req.query.end, symbol: req.params.symbol };

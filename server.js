@@ -1,21 +1,30 @@
-"use strict";
-const https = require('https');
-const express = require("express")
-const morgan = require('morgan')
+const express = require("express");
+const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
-const fs = require('fs');
-const cors = require('cors');
-
-var app = express();
+const app = express();
 const PORT = process.env.PORT || 3000;
+// routes
+const index = require('./routes/index');
+const watchlist = require('./routes/watchlist');
+// const users = require('./routes/users');
 
-// use the public folder files as the client side files needed
-app.use(express.static('build'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
-app.use(cookieParser('my very well kept secret'));
+app.use(cookieParser());
+app.use(myLogger);
+app.use(morgan('common'));
+app.use('/', index);
+app.use('/watchlist', watchlist);
+
+// use the build folder files as the client side files needed
+app.use(express.static('build'));
+
+// Start Listening
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
 
 // Adding in our own middleware logger
 function myLogger(req, res, next) {
@@ -29,20 +38,3 @@ function myLogger(req, res, next) {
   res.append('Set-Cookie', `lastPage= ${req.url}`);
   next();
 }
-
-app.use(myLogger);
-app.use(cors());
-
-var index = require('./routes/index');
-var watchlist = require('./routes/watchlist');
-// var users = require('./routes/users')
-
-app.use(cors());
-
-app.use('/', index);
-app.use('/watchlist', watchlist);
-
-// Start Listening
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
