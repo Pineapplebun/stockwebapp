@@ -55,14 +55,9 @@ function getCollection(req) {
 
 function getIntervalCollection(req) {
   return new Promise(function (resolve, reject) {
-    let startDate;
-    let endDate;
-    try {
-      startDate = new Date(req.start);
-      endDate = new Date(req.end);
-    } catch(err) {
-      reject(err);
-    }
+    let startDate = new Date(req.start);
+    let endDate = new Date(req.end);
+
     getCollection(req).then((data) => {
       let arrSeries = data;
       let interval = [];
@@ -81,18 +76,14 @@ function getIntervalCollection(req) {
 }
 
 function array(data) {
-  try {
-    let json = JSON.parse(data);
-    let daily = json["Time Series (Daily)"];
-    let arr = [];
-    for (let date in daily) {
-      let newObj = {};
-      newObj[date] = daily[date];
-      arr.push(newObj);
-    }
-    return arr;
-  } catch (e) {
-    throw e;
+  let json = JSON.parse(data);
+  let daily = json["Time Series (Daily)"];
+  let arr = [];
+  for (let date in daily) {
+    let newObj = {};
+    newObj[date] = daily[date];
+    arr.push(newObj);
   }
+  return arr;
 }
 

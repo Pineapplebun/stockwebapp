@@ -20,22 +20,22 @@ function getNews(req) {
         // data is requested is buffered
         let data = '';
         res.on('data', (chunk) => { data += chunk });
-        res.on('end', () => { resolve(array(data)) });
+        res.on('end', () => { 
+          try {
+            resolve(array(data))
+          } catch (e) {
+            reject(e)
+          }
+        });
       })
-        .on('error', (e) => { reject(Error(e)); });
+      .on('error', (e) => { reject(e); });
     })
 }
 
 // Return a set of sources to check against the graph
-function getSources() {
-
-}
+function getSources() {}
 
 function array(data) {
-  try {
-    let json = JSON.parse(data);
-    return json["articles"]; // array
-  } catch (e) {
-    return Error(e);
-  }
+  let json = JSON.parse(data);
+  return json["articles"]; // array
 }
