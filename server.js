@@ -10,6 +10,15 @@ const index = require('./routes/index');
 const watchlist = require('./routes/watchlist');
 // const users = require('./routes/users');
 
+// Redirect to HTTPS if not already
+app.use((req, res, next) => {
+  if (req.header('x-forwarded-proto') !== 'https')
+    res.redirect(`https://${req.header('host')}${req.url}`)
+  else
+    next()
+})
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 app.use(cookieParser());
