@@ -6,7 +6,7 @@ const newsUtils = require('../utilities/newsUtils');
 // POST request to add a stock to the user's watchlist
 // Example: localhost:3000/watchlist/add?symbol=amd
 router.get('/add/:symbol', function (req, res) {
-  // Check if token for the session and the user match up
+  // Check if token for the session and the user match up in the redis session store
 
   // use method from database.js to update the string of stock symbols"
   
@@ -29,7 +29,8 @@ router.get('/:symbol', function (req, res) {
       json["stockData"] = result[0];
       json["newsData"] = result[1];
       res.json(json);
-    }, (err) => {
+    })
+    .catch((err) => {
       console.log(err);
       res.json(err);
     })
