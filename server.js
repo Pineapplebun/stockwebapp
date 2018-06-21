@@ -1,27 +1,20 @@
-const express = require("express");
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const redis = require('redis');
-const RedisStore = require('connect-redis')(session);
-const app = express();
-const PORT = process.env.PORT || 3000;
+const express = require("express"),
+  morgan = require('morgan'),
+  bodyParser = require('body-parser'),
+  methodOverride = require('method-override'),
+  session = require('express-session'),
+  cookieParser = require('cookie-parser'),
+  redis = require('redis'),
+  RedisStore = require('connect-redis')(session);
 
 // Import routes
-const index = require('./routes/index');
-const watchlist = require('./routes/watchlist');
-const portfolio = require('./routes/portfolio');
-const auth = require('./routes/auth');
+const index = require('./routes/index'),
+  watchlist = require('./routes/watchlist'),
+  portfolio = require('./routes/portfolio'),
+  auth = require('./routes/auth');
 
-// Redirect to HTTPS if not already
-app.use((req, res, next) => {
-  if (req.header('x-forwarded-proto') !== 'https')
-    res.redirect(`https://${req.header('host')}${req.url}`)
-  else
-    next()
-})
+const app = express(),
+  PORT = process.env.PORT || 3000;
 
 // Session data setup
 const sess = {
@@ -41,6 +34,17 @@ if (app.get('env') === 'production') {
   sess.cookie.secure = true;
 }
 
+// Redirect to HTTPS if not already
+app.use((req, res, next) => {
+  if (req.header('x-forwarded-proto') !== 'https')
+    res.redirect(`https://${req.header('host')}${req.url}`)
+  else
+    next()
+})
+
+// Use the build folder files as the client side files needed
+app.use(express.static('build'));
+
 // Use session
 app.use(cookieParser());
 app.use(session(sess));
@@ -58,9 +62,6 @@ app.use('/', index);
 app.use('/auth', auth);
 app.use('/watchlist', watchlist);
 app.use('/portfolio', portfolio);
-
-// Use the build folder files as the client side files needed
-app.use(express.static('build'));
 
 // Start Listening
 app.listen(PORT, () => {
