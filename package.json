@@ -4,9 +4,11 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.18.2",
+    "connect-redis": "^3.3.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
     "fs": "0.0.1-security",
     "material-ui": "^0.20.1",
     "method-override": "^2.3.10",
@@ -19,6 +21,7 @@
     "react-redux": "^5.0.7",
     "react-scripts": "1.1.4",
     "recharts": "^1.0.0-beta.10",
+    "redis": "^2.8.0",
     "redux": "^4.0.0",
     "redux-thunk": "^2.2.0"
   },
