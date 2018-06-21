@@ -19,7 +19,7 @@ passport.use(new GoogleStrategy({
 );
 
 router.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }));
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => { // if valid
@@ -28,7 +28,6 @@ router.get('/auth/google/callback', passport.authenticate('google', { failureRed
     const sess = req.session;
     sess.userid = 'userid';
     res.redirect('/');
-  }
-)
+});
 
 module.exports = router;

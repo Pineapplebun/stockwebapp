@@ -1,28 +1,17 @@
 import React, { Component } from 'react';
-import { GoogleLogin } from 'react-google-login';
+import googleButton from './google_signin_buttons/web/1x/btn_google_signin_light_normal_web.png'
 
 export class GoogleSignIn extends Component {
 
-    render() {
-        return (
-            <div>
-                <GoogleLogin
-                    clientId="539270675308-uuv7fbph254uiobp2i64d3f24a6utkbe.apps.googleusercontent.com"
-                    buttonText="Login"
-                    onSuccess={this.onSuccess}
-                    onFailure={this.onFailure}
-                />
-            </div>
-        )
-    }
-
-    onSuccess(response) {
-        console.log(response);
-    }
-
-    onFailure(error) {
-        console.log(error);
-    }
+  render() {
+    return (
+      <div>
+        <a href="/auth/google">Sign In with Google>
+          <img src={googleButton} alt="Sign in with Google Button"></img>
+        </a>
+      </div>
+    )
+  }
 
 }
 
