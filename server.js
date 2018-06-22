@@ -5,7 +5,8 @@ const express = require("express"),
   session = require('express-session'),
   cookieParser = require('cookie-parser'),
   redis = require('redis'),
-  RedisStore = require('connect-redis')(session);
+  RedisStore = require('connect-redis')(session),
+  passport = require('passport');
 
 // Import routes
 const index = require('./routes/index'),
@@ -20,6 +21,7 @@ const app = express(),
 const sess = {
   secret: 'some-private-key',
   key: 'test',
+  proxy: true,
   store: new RedisStore({
     client: redis.createClient(process.env.REDIS_URL),
   }),
@@ -48,6 +50,8 @@ app.use(express.static('build'));
 // Use session
 app.use(cookieParser());
 app.use(session(sess));
+app.use(passport.initialize());
+app.use(passport.session()); // uses the same session as express-session
 
 // POST method details 
 app.use(bodyParser.json()); // allows us to read json data
@@ -60,6 +64,8 @@ app.use(morgan('common'));
 // Use routers
 app.use('/', index);
 app.use('/auth', auth);
+// Ensure the rest of the routes require authentication
+app.all('*', checkAuthenticated);
 app.use('/watchlist', watchlist);
 app.use('/portfolio', portfolio);
 
@@ -67,6 +73,14 @@ app.use('/portfolio', portfolio);
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect('/auth/login');
+  }
+}
 
 // Adding in our own middleware logger
 /*
