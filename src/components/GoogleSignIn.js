@@ -6,8 +6,8 @@ export class GoogleSignIn extends Component {
   render() {
     return (
       <div>
-        <a href="/auth/google">Sign In with Google>
-          <img src={googleButton} alt="Sign in with Google Button"></img>
+        <a href="/auth/google">
+          <img src={googleButton} alt="Sign in with Google Button"/>
         </a>
       </div>
     )
