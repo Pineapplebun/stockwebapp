@@ -7,14 +7,16 @@ const express = require('express'),
 passport.serializeUser((sessionUser, done) => {
   // user is a document
   // sets the user document _id value in passport: { user: '_id' }
-  done(null, sessionUser.id);
+  // console.log('serialize', sessionUser);
+  done(null, sessionUser[0].id);
 });
 
 passport.deserializeUser((id, done) => {
   // receives the id value of user in passport: { user: '_id' }
   User.findById(id)
   .then((sessionUser) => {
-    done(null, sessionUser[0]);
+    // console.log(sessionUser);
+    done(null, sessionUser);
   })
   .catch((err) => console.log(err));
   
