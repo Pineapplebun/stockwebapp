@@ -28,8 +28,7 @@ mongoose.connection.on('error', function(err) {
 
 // Session data setup
 const sess = {
-  secret: 'some-private-key',
-  //key: 'passport',
+  secret: process.env.SESSION_SECRET,
   /*store: new RedisStore({
     client: redis.createClient(process.env.REDIS_URL),
   }),*/
