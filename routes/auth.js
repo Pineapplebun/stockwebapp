@@ -1,17 +1,23 @@
 const express = require('express'),
   passport = require('passport'),
-  GoogleStrategy = require('passport-google-oauth').OAuthStrategy,
+  GoogleStrategy = require('passport-google-oauth20'),
   router = express.Router(),
   User = require('../db/models/user');
 
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
+passport.serializeUser((sessionUser, done) => {
+  // user is a document
+  // sets the user document _id value in passport: { user: '_id' }
+  done(null, sessionUser.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-      done(err, user);
-  });
+passport.deserializeUser((id, done) => {
+  // receives the id value of user in passport: { user: '_id' }
+  User.findById(id)
+  .then((sessionUser) => {
+    done(null, sessionUser[0]);
+  })
+  .catch((err) => console.log(err));
+  
 });
 
 // Use the google oauth strategy when passport.authenticate is called
@@ -22,36 +28,43 @@ passport.use(new GoogleStrategy({
   },
   function(accessToken, refreshToken, profile, done) {
     // Check if the user is already registered => add to database, and/or retrieve details to store in session
-    User.findOne({ providerUserId: profile.id }, function (err, user) {
+
+    // this function is not calling done... don't user findbyone since it can return arbitrary docs
+    User.find({ providerUserId: profile.id }, function (err, user) {
       if (err) { return done(err, user); }
-      
-      // New user
-      if (!user) { // user false means not in db
-        const user = new User({
+      if (!user) { // user==false means not in db
+        const newUser = new User({
           name: profile.displayName,
           email: profile.emails[0].value,
           providerUserId: profile.id,
           authProvider: 'google',
           portfolios: [],
-        });
-
-        // save the user
-        user.save(function(err) {
+        }).save((err) => {
           if (err) { throw err; }
         });
-      }
-      return done(err, user);
 
-    });
+        return done(err, newUser);
+      } else {
+        // user already signed up and is in our database
+        return done(err, user);
+      }
+    })
+
+    // error occurred
+    // return done(null, false, {message: 'Database connection error'});
+
   })
 );
 
 router.get('/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/google/login' }),
-  (req, res) => {
-    res.redirect('/');
-});
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/auth/failure', successRedirect: '/' }));
+
+router.get('/failure', (req, res) => {
+  res
+  .status(401)
+  .send('login failure');
+})
 
 module.exports = router;
