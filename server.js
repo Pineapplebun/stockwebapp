@@ -5,6 +5,8 @@ const express = require("express"),
   session = require('express-session'),
   cookieParser = require('cookie-parser'),
   redis = require('redis'),
+  mongoose = require('mongoose'),
+  MongoStore = require('connect-mongo')(session);
   RedisStore = require('connect-redis')(session),
   passport = require('passport');
 
@@ -15,42 +17,56 @@ const index = require('./routes/index'),
   auth = require('./routes/auth');
 
 const app = express(),
-  PORT = process.env.PORT || 3000;
+  PORT = process.env.PORT || 3000,
+  connection = mongoose.connect(process.env.MONGODB_URI);
+
+mongoose.connection.on('error', function(err) {
+  console.error('MongoDB error: %s', err);
+});
+
+// console.log(connection);
 
 // Session data setup
 const sess = {
   secret: 'some-private-key',
-  key: 'test',
-  proxy: true,
-  store: new RedisStore({
+  //key: 'passport',
+  /*store: new RedisStore({
     client: redis.createClient(process.env.REDIS_URL),
+  }),*/
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 5*60,
   }),
   resave: false,
   saveUninitialized: false,
   ttl: 3600,
-}
-
-// Use secure if in production
-if (app.get('env') === 'production') {
-  app.set('trust proxy', '1');
-  sess.cookie.secure = true;
+  cookie: { 
+    secure: false,
+    httpOnly: false,
+  },
 }
 
 // Redirect to HTTPS if not already
 app.use((req, res, next) => {
-  if (req.header('x-forwarded-proto') !== 'https')
-    res.redirect(`https://${req.header('host')}${req.url}`)
-  else
-    next()
+  if (req.header('x-forwarded-proto') !== 'https' && process.env.NODE_ENV === "production") {
+    sess.cookie.secure = true;
+    sess.cookie.httpOnly = true;
+    app.set('trust proxy', 1);
+    sess.proxy = true;
+    res.redirect(`https://${req.header('host')}${req.url}`);
+  } else {
+    next();
+  }
 })
 
 // Use the build folder files as the client side files needed
 app.use(express.static('build'));
 
-// Use session
 app.use(cookieParser());
+// Use session
 app.use(session(sess));
 app.use(passport.initialize());
+app.use((req,res, next) => {console.log(req.session); next();})
 app.use(passport.session()); // uses the same session as express-session
 
 // POST method details 
@@ -58,16 +74,16 @@ app.use(bodyParser.json()); // allows us to read json data
 app.use(bodyParser.urlencoded({ extended: false })); // allows us to read POST form data from the URL 
 app.use(methodOverride('_method')); // for PUT and DELETE methods since they are not supported
 
+
 // Logger
 app.use(morgan('common'));
 
-// Use routers
+// Use routers and ensure the rest of the routes require authentication
 app.use('/', index);
 app.use('/auth', auth);
-// Ensure the rest of the routes require authentication
 app.all('*', checkAuthenticated);
 app.use('/watchlist', watchlist);
-app.use('/portfolio', portfolio);
+//app.use('/portfolio', portfolio);
 
 // Start Listening
 app.listen(PORT, () => {
@@ -76,9 +92,10 @@ app.listen(PORT, () => {
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
+    console.log('authenticated');
     next();
   } else {
-    res.redirect('/auth/login');
+    res.redirect('/auth/failure/');
   }
 }
 
