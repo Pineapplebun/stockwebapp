@@ -54,6 +54,7 @@ app.use((req, res, next) => {
     sess.cookie.httpOnly = true;
     app.set('trust proxy', 1);
     sess.proxy = true;
+    next();
   } else {
     next();
   }
