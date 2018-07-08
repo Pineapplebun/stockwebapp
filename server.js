@@ -48,11 +48,12 @@ const sess = {
 // Redirect to HTTPS if not already
 app.use((req, res, next) => {
   if (req.header('x-forwarded-proto') !== 'https' && process.env.NODE_ENV === "production") {
+    res.redirect(`https://${req.header('host')}${req.url}`);
+  } else if (req.header('x-forwarded-proto') === 'https') {
     sess.cookie.secure = true;
     sess.cookie.httpOnly = true;
     app.set('trust proxy', 1);
     sess.proxy = true;
-    res.redirect(`https://${req.header('host')}${req.url}`);
   } else {
     next();
   }
@@ -65,7 +66,7 @@ app.use(cookieParser());
 // Use session
 app.use(session(sess));
 app.use(passport.initialize());
-app.use((req,res, next) => {console.log(req.session); next();})
+app.use((req, res, next) => {console.log(req.session); next();})
 app.use(passport.session()); // uses the same session as express-session
 
 // POST method details 

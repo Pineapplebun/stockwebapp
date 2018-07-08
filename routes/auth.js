@@ -8,7 +8,7 @@ passport.serializeUser((sessionUser, done) => {
   // user is a document
   // sets the user document _id value in passport: { user: '_id' }
   // console.log('serialize', sessionUser);
-  done(null, sessionUser[0].id);
+  done(null, sessionUser.id);
 });
 
 passport.deserializeUser((id, done) => {
@@ -32,7 +32,7 @@ passport.use(new GoogleStrategy({
     // Check if the user is already registered => add to database, and/or retrieve details to store in session
 
     // this function is not calling done... don't user findbyone since it can return arbitrary docs
-    User.find({ providerUserId: profile.id }, function (err, user) {
+    User.findOne({ providerUserId: profile.id }, function (err, user) {
       if (err) { return done(err, user); }
       if (!user) { // user==false means not in db
         const newUser = new User({
