@@ -11,8 +11,8 @@
   height: 100%;
   margin: 0;
   display: grid;
-  grid-template-areas:
-    'menu main right';
+  grid-template-columns:
+    30% 40% 30%;
   grid-gap: 0%;
   background-color: lightsteelblue;
   padding: 0%;
