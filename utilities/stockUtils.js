@@ -1,81 +1,38 @@
-/* Example format for daily series
-{
-    "Meta Data": {
-        "1. Information": "Daily Prices (open, high, low, close) and Volumes",
-        "2. Symbol": "MSFT",
-        "3. Last Refreshed": "2018-05-08",
-        "4. Output Size": "Compact",
-        "5. Time Zone": "US/Eastern"
-    },
-    "Time Series (Daily)": {
-        "2018-05-08": {
-            "1. open": "95.8456",
-            "2. high": "96.1600",
-            "3. low": "95.0631",
-            "4. close": "95.8100",
-            "5. volume": "22763628"
-        },
-        "2018-05-07": {
-            "1. open": "95.1700",
-            "2. high": "96.7100",
-            "3. low": "95.1000",
-            "4. close": "96.2200",
-            "5. volume": "24242019"
-        },
-*/
-
-const https = require("https");
+const axios = require("axios"),
+  timeSeries = 'TIME_SERIES_DAILY',
+  apiKeyAV = process.env.STOCK_API;
 
 module.exports = {
-  getCollection: getCollection,
-  getIntervalCollection: getIntervalCollection
+  getStockData,
+  filterStockData
 }
 
-var timeSeries = 'TIME_SERIES_DAILY';
-var apiKeyAV = process.env.STOCK_API;
-
-function getCollection(req) {
-  return new Promise(function (resolve, reject) {
-    var urlAV = `https://www.alphavantage.co/query?function=${timeSeries}&symbol=${req.symbol}&apikey=${apiKeyAV}`;
-    https.get(urlAV, (res) => {
-      // data is requested is buffered
-      let data = '';
-      res.on('data', (chunk) => { data += chunk });
-      res.on('end', () => {
-        try {
-          resolve(array(data));
-        } catch(e) {
-          reject(e);
-        }
-      });
-    })
-    .on('error', (e) => { reject(e); });
-  })
+function getStockData(msg) {
+  return axios.get(`https://www.alphavantage.co/query?function=${timeSeries}&symbol=${msg.symbol}&apikey=${apiKeyAV}`)
 }
 
-function getIntervalCollection(req) {
-  return new Promise(function (resolve, reject) {
-    let startDate = new Date(req.start);
-    let endDate = new Date(req.end);
+/**
+ * Function to filter data.
+ */
+function filterStockData(data, start, end) {
+  let startDate = new Date(start);
+  let endDate = new Date(end);
 
-    getCollection(req).then((data) => {
-      let arrSeries = data;
-      let interval = [];
-      for (let timepoint of arrSeries) {
-        let date = Object.keys(timepoint)[0];
-        let stockDate = new Date(date);
-        if (startDate <= stockDate && stockDate <= endDate) {
-          interval.push(timepoint);
-        }
-      }
-      resolve(interval);
-    }, (err) => {
-      reject(err);
-    });
-  })
+  // Organize the data into the correct format
+  let stockDataArray = _formatStockData(data);
+  let _filter = (sData) => {
+    let stockDate = Object.keys(sData)[0];
+    stockDate = new Date(stockDate);
+    return startDate <= stockDate && stockDate <= endDate;
+  }
+  return stockDataArray.filter(_filter);
 }
 
-function array(data) {
+/**
+ * Helper function to format stock data.
+ * @param {*} data 
+ */
+function _formatStockData(data) {
   let json = JSON.parse(data);
   let daily = json["Time Series (Daily)"];
   let arr = [];
