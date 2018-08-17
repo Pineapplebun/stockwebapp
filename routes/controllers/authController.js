@@ -1,6 +1,6 @@
 const User = require('../../db/models/user');
 
-module.export = {
+module.exports = {
   createOrSignIn,
   serializeUser,
   deserializeUser,
