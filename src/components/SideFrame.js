@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { GridList, GridTile } from 'material-ui/GridList';
 import { List, ListItem } from 'material-ui/List';
-import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
 import './SideFrame.css';
+import './Card.css';
 import { connect } from 'react-redux';
 import { updateOptions, fetchChart, selectStock } from '../actions/chartActions';
 import PropTypes from 'prop-types';
+import GoogleSignIn from './GoogleSignIn';
 
 export class SideFrame extends Component {
   constructor(props) {
@@ -34,13 +34,10 @@ export class SideFrame extends Component {
 
   render() {
     //console.log(Object.keys(this.props).length === 0);
-    const optionsStyle = {
-      maxWidth: 100,
-      marginRight: 'auto',
-      padding: '20px',
-    };
     return (
-      <Drawer open={this.state.open}>
+      //<Drawer open={this.state.open}>
+      <div className="card">
+        <GoogleSignIn></GoogleSignIn>
         <h3> Enter a stock symbol: </h3>
         <form onSubmit={this.handleSubmit}>
           <input
@@ -50,7 +47,7 @@ export class SideFrame extends Component {
           <button>Add to Watchlist</button>
         </form>
         <h3> Chart Options</h3>
-        <div style={optionsStyle}>
+        <div className="container">
           <DatePicker
             onChange={this.handleChangeMinDate}
             autoOk={this.state.autoOk}
@@ -75,7 +72,8 @@ export class SideFrame extends Component {
           items={this.state.items}
           rates={this.state.rates}
         />
-      </Drawer>
+      </div>
+      //</Drawer>
 
     );
   }

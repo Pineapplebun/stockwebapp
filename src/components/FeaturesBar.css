@@ -1,0 +1,18 @@
+.Features-bar {
+  background-color: black;
+  margin: 0 0 0 0;
+}
+
+.Feature-list-item {
+  display: inline-block;
+}
+
+.Feature-link {
+  background-color: transparent;
+  text-transform: uppercase;
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 10px 10px 10px 10px;
+  color: white;
+  list-style-type: none;
+}

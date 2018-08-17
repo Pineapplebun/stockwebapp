@@ -5,6 +5,7 @@ import SideFrame from './components/SideFrame.js';
 import MainFrame from './components/MainFrame.js';
 import NewsFrame from './components/NewsFrame.js';
 import HeaderFrame from './components/HeaderFrame.js';
+import FeaturesBar from './components/FeaturesBar.js';
 
 
 class App extends Component {
@@ -12,6 +13,7 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <HeaderFrame></HeaderFrame>
+        <FeaturesBar></FeaturesBar>
         <div className="grid-container">
           <SideFrame className="sideframe"></SideFrame>
           <MainFrame className="mainframe"></MainFrame>
