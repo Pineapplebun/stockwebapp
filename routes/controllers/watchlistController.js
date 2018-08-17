@@ -40,7 +40,7 @@ function addStockToWatchlist(req, res) {
   // use method from database.js to update the string of stock symbols"
   
   // respond with success or failure
-  
+  console.log('added');
 }
 
 /**
@@ -49,7 +49,7 @@ function addStockToWatchlist(req, res) {
  * @param {*} res 
  */
 function removeStockFromWatchlist(req, res) {
-
+  console.log('removed');
 }
 
 /**
@@ -58,10 +58,10 @@ function removeStockFromWatchlist(req, res) {
  * @param {*} res 
  */
 function modifyStockDetails(req, res) {
-
+  console.log('modified');
 }
 
-module.export = {
+module.exports = {
     retrieveChartData,
     addStockToWatchlist,
     removeStockFromWatchlist,
