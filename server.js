@@ -75,7 +75,6 @@ app.use(bodyParser.json()); // allows us to read json data
 app.use(bodyParser.urlencoded({ extended: false })); // allows us to read POST form data from the URL 
 app.use(methodOverride('_method')); // for PUT and DELETE methods since they are not supported
 
-
 // Logger
 app.use(morgan('common'));
 
@@ -99,17 +98,3 @@ function checkAuthenticated(req, res, next) {
     res.redirect('/auth/failure/');
   }
 }
-
-// Adding in our own middleware logger
-/*
-function myLogger(req, res, next) {
-  console.log('Raw Cookies: ', req.headers.cookie);
-  console.log('Cookie Parser: ', req.cookies);
-  console.log('Signed Cookies: ', req.signedCookies);
-  if (req.body) {
-    console.log('LOG:', req.method, req.url, req.body);
-  }
-  // Add something to the header field
-  res.append('Set-Cookie', `lastPage= ${req.url}`);
-  next();
-}*/
