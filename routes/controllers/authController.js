@@ -6,14 +6,14 @@ module.export = {
   deserializeUser,
 }
 
-serializeUser = (sessionUser, done) => {
+function serializeUser(sessionUser, done) {
   // user is a document
   // sets the user document _id value in passport: { user: '_id' }
   // console.log('serialize', sessionUser);
   done(null, sessionUser.id);
 };
 
-deserializeUser = (id, done) => {
+function deserializeUser(id, done) {
   // receives the id value of user in passport: { user: '_id' }
   User.findById(id)
   .then((sessionUser) => {
