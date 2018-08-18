@@ -8,7 +8,7 @@ import './Card.css';
 export class NewsFrame extends Component {
   render() {
     return (
-        <div class="card">
+        <div className="card">
           <List style={{maxHeight: '100%', overflow: 'auto', backgroundColor: 'white'}}>
             <h3> News Headlines </h3>
             {this.props.newsData.map(article => (

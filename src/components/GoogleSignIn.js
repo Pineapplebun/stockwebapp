@@ -3,7 +3,6 @@ import googleButton from './google_signin_buttons/web/1x/btn_google_signin_light
 import './GoogleSignIn.css';
 
 export class GoogleSignIn extends Component {
-
   render() {
     return (
       <div id="google-sign-in">

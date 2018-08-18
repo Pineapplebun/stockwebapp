@@ -13,7 +13,7 @@ export class MainFrame extends Component {
     var XAxisKey="time";
     var YAxisKey="volume";
     return (
-      <div id="LineChart">
+      <div className="card">
         <LineChart width={500} height={500} data={data}
           margin={{ top: 30, right: 30, left: 50, bottom: 30 }}>
           <XAxis datakey={XAxisKey} />

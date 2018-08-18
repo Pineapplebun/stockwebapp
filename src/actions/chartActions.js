@@ -1,4 +1,4 @@
-import { FETCH_CHART, CHART_OPTIONS, SELECT_STOCK } from './types';
+import { FETCH_CHART, CHART_OPTIONS, SELECT_STOCK, SELECT_SIDE_FRAME_CARD } from './types';
 import { watchlistURL } from './serverCalls';
 
 export const fetchChart = (queryData) => dispatch => {
@@ -30,12 +30,22 @@ export const updateOptions = (updateData) => {
   }
 }
 
-export const selectStock = (selectStock) => {
-  console.log(selectStock);
+export const selectStock = (stock) => {
+  console.log(stock);
   return function (dispatch) {
     dispatch({
       type: SELECT_STOCK,
-      payload: selectStock,
+      payload: stock,
     });
+  }
+}
+
+export const selectSideFrameCard = (sideFrameCard) => {
+  console.log(sideFrameCard);
+  return function (dispatch) {
+    dispatch({
+      type: SELECT_SIDE_FRAME_CARD,
+      payload: sideFrameCard,
+    })
   }
 }

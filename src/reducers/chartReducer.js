@@ -1,9 +1,10 @@
-import { FETCH_CHART, CHART_OPTIONS, SELECT_STOCK } from '../actions/types';
+import { FETCH_CHART, CHART_OPTIONS, SELECT_STOCK, SELECT_SIDE_FRAME_CARD } from '../actions/types';
 
 const initialState = {
   chartData: [],
   newsData: [],
   selectStock: '',
+  selectSideFrameCard: 'Sign In',
   chartOptions: {
     XAxisKey: 'time',
     YAxisKey: 'volume',
@@ -29,6 +30,11 @@ export default function (state = initialState, action) {
         ...state,
         selectStock: action.payload,
       };
+    case SELECT_SIDE_FRAME_CARD:
+      return {
+        ...state,
+        selectSideFrameCard: action.payload,
+      }
     default:
       return state;
   }
