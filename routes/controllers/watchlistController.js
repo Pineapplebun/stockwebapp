@@ -11,6 +11,15 @@ function addStockToWatchlist(req, res) {
 }
 
 /**
+ * Get stock data from watchlist.
+ * @param {*} req 
+ * @param {*} res 
+ */
+function getStockFromWatchlist(req, res) {
+  console.log('got');
+}
+
+/**
  * Remove a stock from a watchlist.
  * @param {*} req 
  * @param {*} res 
@@ -30,6 +39,7 @@ function modifyStockDetails(req, res) {
 
 module.exports = {
   addStockToWatchlist,
+  getStockFromWatchlist,
   removeStockFromWatchlist,
   modifyStockDetails
 }
