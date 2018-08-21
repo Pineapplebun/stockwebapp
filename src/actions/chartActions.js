@@ -1,8 +1,8 @@
 import { FETCH_CHART, CHART_OPTIONS, SELECT_STOCK, SELECT_SIDE_FRAME_CARD } from './types';
-import { watchlistURL } from './serverCalls';
 
 export const fetchChart = (queryData) => dispatch => {
-  fetch(`${watchlistURL}${queryData.symbol}?start=${queryData.minDate}&end=${queryData.maxDate}`, { method: 'GET', credentials: 'same-origin'})
+  let fetchOptions = { method: 'GET', credentials: 'same-origin', cache: 'no-cache'};
+  fetch(window.location.host + `${queryData.symbol}?start=${queryData.minDate}&end=${queryData.maxDate}`, fetchOptions)
     .then(response => {
       if (response.ok) {
         return response.json();
