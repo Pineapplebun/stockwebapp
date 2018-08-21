@@ -5,21 +5,21 @@ const express = require('express'),
 /**
  * POST request to add a stock to the user's watchlist
  */
-router.post('/:watchlist/:symbol', watchlistController.addStockToWatchlist)
+router.post('/watchlist/:watchlist', watchlistController.addStockToWatchlist)
 
 /**
  * GET request for the graph data. The path is '/watchlist/amd?start=2017-12-01&end=2018-01-30'.
  */
-router.get('/:watchlist/:symbol', watchlistController.retrieveChartData)
+router.get('/watchlist/:watchlist', watchlistController.getStockFromWatchlist)
 
 /**
  * DELETE request to remove a stock from the watchlist.
  */
-router.delete('/:watchlist/:symbol', watchlistController.removeStockFromWatchlist)
+router.delete('/watchlist/:watchlist', watchlistController.removeStockFromWatchlist)
 
 /**
  * PUT request to modify a stock from the watchlist.
  */
-router.put('/:watchlist/:symbol', watchlistController.modifyStockDetails)
+router.put('/watchlist/:watchlist', watchlistController.modifyStockDetails)
 
 module.exports = router;

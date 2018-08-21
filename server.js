@@ -4,16 +4,16 @@ const express = require("express"),
   methodOverride = require('method-override'),
   session = require('express-session'),
   cookieParser = require('cookie-parser'),
-  redis = require('redis'),
+  //redis = require('redis'),
   mongoose = require('mongoose'),
   MongoStore = require('connect-mongo')(session);
-  RedisStore = require('connect-redis')(session),
+  //RedisStore = require('connect-redis')(session),
   passport = require('passport');
 
 // Import routes
 const index = require('./routes/index'),
   watchlist = require('./routes/watchlist'),
-  portfolio = require('./routes/portfolio'),
+  search = require('./routes/search'),
   auth = require('./routes/auth');
 
 const app = express(),
@@ -83,7 +83,7 @@ app.use('/', index);
 app.use('/auth', auth);
 app.all('*', checkAuthenticated);
 app.use('/watchlist', watchlist);
-//app.use('/portfolio', portfolio);
+app.use('/search', search);
 
 // Start Listening
 app.listen(PORT, () => {
