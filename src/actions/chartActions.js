@@ -5,18 +5,20 @@ export const fetchChart = (queryData) => dispatch => {
   fetch(`/search?symbol=${queryData.symbol}&start=${queryData.minDate}&end=${queryData.maxDate}`, fetchOptions)
     .then(response => {
       if (response.ok) {
-        return response.json();
+        let json = response.json();
+        // Need to check if newsData and stockData are valid
+        if (json.stockData && json.newsData) {
+          dispatch({
+            type: FETCH_CHART,
+            payload1: json.stockData,
+            payload2: json.newsData,
+          })
+        } else {
+          throw response.error;
+        }
       } else {
         throw response.error;
       }
-    })
-    .then(json => {
-      console.log(json);
-      dispatch({
-        type: FETCH_CHART,
-        payload1: json.stockData,
-        payload2: json.newsData,
-      })
     })
     .catch(error => console.log(error));
 }
