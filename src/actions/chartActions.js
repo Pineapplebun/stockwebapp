@@ -2,7 +2,7 @@ import { FETCH_CHART, CHART_OPTIONS, SELECT_STOCK, SELECT_SIDE_FRAME_CARD } from
 
 export const fetchChart = (queryData) => dispatch => {
   let fetchOptions = { method: 'GET', credentials: 'same-origin', cache: 'no-cache'};
-  fetch(window.location.host + `${queryData.symbol}?start=${queryData.minDate}&end=${queryData.maxDate}`, fetchOptions)
+  fetch(window.location.host + `/${queryData.symbol}?start=${queryData.minDate}&end=${queryData.maxDate}`, fetchOptions)
     .then(response => {
       if (response.ok) {
         return response.json();
