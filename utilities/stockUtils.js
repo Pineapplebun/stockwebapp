@@ -7,6 +7,10 @@ module.exports = {
   filterStockData
 }
 
+/**
+ * Retrieve Stock Data.
+ * @param {*} msg 
+ */
 function getStockData(msg) {
   return axios.get(`https://www.alphavantage.co/query?function=${timeSeries}&symbol=${msg.symbol}&apikey=${apiKeyAV}`)
 }
@@ -32,8 +36,7 @@ function filterStockData(data, start, end) {
  * Helper function to format stock data.
  * @param {*} data 
  */
-function _formatStockData(data) {
-  let json = JSON.parse(data);
+function _formatStockData(json) {
   let daily = json["Time Series (Daily)"];
   let arr = [];
   for (let date in daily) {
