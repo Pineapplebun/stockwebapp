@@ -4,16 +4,16 @@ const express = require("express"),
   methodOverride = require('method-override'),
   session = require('express-session'),
   cookieParser = require('cookie-parser'),
-  redis = require('redis'),
+  //redis = require('redis'),
   mongoose = require('mongoose'),
   MongoStore = require('connect-mongo')(session);
-  RedisStore = require('connect-redis')(session),
+  //RedisStore = require('connect-redis')(session),
   passport = require('passport');
 
 // Import routes
 const index = require('./routes/index'),
   watchlist = require('./routes/watchlist'),
-  portfolio = require('./routes/portfolio'),
+  search = require('./routes/search'),
   auth = require('./routes/auth');
 
 const app = express(),
@@ -50,8 +50,6 @@ app.use((req, res, next) => {
   if (req.header('x-forwarded-proto') !== 'https' && process.env.NODE_ENV === "production") {
     res.redirect(`https://${req.header('host')}${req.url}`);
   } else if (req.header('x-forwarded-proto') === 'https') {
-    sess.cookie.secure = true;
-    sess.cookie.httpOnly = true;
     app.set('trust proxy', 1);
     sess.proxy = true;
     next();
@@ -75,7 +73,6 @@ app.use(bodyParser.json()); // allows us to read json data
 app.use(bodyParser.urlencoded({ extended: false })); // allows us to read POST form data from the URL 
 app.use(methodOverride('_method')); // for PUT and DELETE methods since they are not supported
 
-
 // Logger
 app.use(morgan('common'));
 
@@ -84,7 +81,7 @@ app.use('/', index);
 app.use('/auth', auth);
 app.all('*', checkAuthenticated);
 app.use('/watchlist', watchlist);
-//app.use('/portfolio', portfolio);
+app.use('/search', search);
 
 // Start Listening
 app.listen(PORT, () => {
@@ -92,24 +89,10 @@ app.listen(PORT, () => {
 });
 
 function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
+  if (req.isAuthenticated() || process.env.NODE_ENV === "development") {
     console.log('authenticated');
     next();
   } else {
     res.redirect('/auth/failure/');
   }
 }
-
-// Adding in our own middleware logger
-/*
-function myLogger(req, res, next) {
-  console.log('Raw Cookies: ', req.headers.cookie);
-  console.log('Cookie Parser: ', req.cookies);
-  console.log('Signed Cookies: ', req.signedCookies);
-  if (req.body) {
-    console.log('LOG:', req.method, req.url, req.body);
-  }
-  // Add something to the header field
-  res.append('Set-Cookie', `lastPage= ${req.url}`);
-  next();
-}*/

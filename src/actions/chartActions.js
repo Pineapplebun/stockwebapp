@@ -1,22 +1,24 @@
-import { FETCH_CHART, CHART_OPTIONS, SELECT_STOCK } from './types';
-import { watchlistURL } from './serverCalls';
+import { FETCH_CHART, CHART_OPTIONS, SELECT_STOCK, SELECT_SIDE_FRAME_CARD } from './types';
 
 export const fetchChart = (queryData) => dispatch => {
-  fetch(`${watchlistURL}${queryData.symbol}?start=${queryData.minDate}&end=${queryData.maxDate}`, { method: 'GET', credentials: 'same-origin'})
+  let fetchOptions = { method: 'GET', credentials: 'same-origin', cache: 'no-cache'};
+  fetch(`/search?symbol=${queryData.symbol}&start=${queryData.minDate}&end=${queryData.maxDate}`, fetchOptions)
     .then(response => {
       if (response.ok) {
-        return response.json();
+        response.json().then((obj) => {
+          if (obj.stockData && obj.newsData) {
+            dispatch({
+              type: FETCH_CHART,
+              payload1: obj.stockData,
+              payload2: obj.newsData,
+            })
+          } else {
+            throw response.error;
+          }
+        }); // This is a promise  
       } else {
         throw response.error;
       }
-    })
-    .then(json => {
-      console.log(json);
-      dispatch({
-        type: FETCH_CHART,
-        payload1: json.stockData,
-        payload2: json.newsData,
-      })
     })
     .catch(error => console.log(error));
 }
@@ -30,12 +32,22 @@ export const updateOptions = (updateData) => {
   }
 }
 
-export const selectStock = (selectStock) => {
-  console.log(selectStock);
+export const selectStock = (stock) => {
+  console.log(stock);
   return function (dispatch) {
     dispatch({
       type: SELECT_STOCK,
-      payload: selectStock,
+      payload: stock,
     });
+  }
+}
+
+export const selectSideFrameCard = (sideFrameCard) => {
+  console.log(sideFrameCard);
+  return function (dispatch) {
+    dispatch({
+      type: SELECT_SIDE_FRAME_CARD,
+      payload: sideFrameCard,
+    })
   }
 }

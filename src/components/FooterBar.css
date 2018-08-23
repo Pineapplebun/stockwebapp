@@ -1,0 +1,24 @@
+footer {
+  position:absolute;
+  bottom:0;
+  width:100%;
+}
+
+.Footer-bar {
+  background-color: black;
+  margin: 0 0 0 0;
+}
+
+.Footer-list-item {
+  display: inline-block;
+}
+
+.Footer-link {
+  background-color: transparent;
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 10px 10px 10px 10px;
+  color: white;
+  list-style-type: none;
+  font-weight: bold;
+}
