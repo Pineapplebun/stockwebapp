@@ -50,8 +50,6 @@ app.use((req, res, next) => {
   if (req.header('x-forwarded-proto') !== 'https' && process.env.NODE_ENV === "production") {
     res.redirect(`https://${req.header('host')}${req.url}`);
   } else if (req.header('x-forwarded-proto') === 'https') {
-    sess.cookie.secure = true;
-    sess.cookie.httpOnly = true;
     app.set('trust proxy', 1);
     sess.proxy = true;
     next();
@@ -91,7 +89,7 @@ app.listen(PORT, () => {
 });
 
 function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
+  if (req.isAuthenticated() || process.env.NODE_ENV === "development") {
     console.log('authenticated');
     next();
   } else {
