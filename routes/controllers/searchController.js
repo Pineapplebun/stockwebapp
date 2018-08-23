@@ -12,10 +12,13 @@ function retrieveChartData(req, res) {
   
   Promise.all(promises)
     .then((result) => {
+      // Validate stockData and newsData
       let json = {
         stockData: stockUtils.filterStockData(result[0], req.query.start, req.query.end),
         newsData: result[1]["articles"]
       }
+      // Todo: validate the results of the promises
+      
       res
       .status(200)
       .cookie('last_resource_request', 'GET /watchlist', { maxAge: 600000 })
