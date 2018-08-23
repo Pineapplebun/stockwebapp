@@ -14,15 +14,18 @@ function retrieveChartData(req, res) {
     .then((result) => {
       // Validate stockData and newsData
       let json = {
-        stockData: stockUtils.filterStockData(result[0], req.query.start, req.query.end),
-        newsData: result[1]["articles"]
+        stockData: stockUtils.filterStockData(result[0].data, req.query.start, req.query.end),
+        newsData: result[1].data["articles"]
       }
       // Todo: validate the results of the promises
-      
-      res
-      .status(200)
-      .cookie('last_resource_request', 'GET /watchlist', { maxAge: 600000 })
-      .json(json);
+      if (json.stockData && json.newsData) {
+        res
+        .status(200)
+        .cookie('last_resource_request', 'GET /watchlist', { maxAge: 600000 })
+        .json(json);
+      } else {
+        throw Error('Something went wrong with processing your data =(.')
+      }
     })
     .catch((err) => {
       res
