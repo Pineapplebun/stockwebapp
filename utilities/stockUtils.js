@@ -19,11 +19,13 @@ function getStockData(msg) {
  * Function to filter data.
  */
 function filterStockData(data, start, end) {
+  // Filter data settings
   let startDate = new Date(start);
   let endDate = new Date(end);
 
   // Organize the data into the correct format
   let stockDataArray = _formatStockData(data);
+  // Create an arrow function filter
   let _filter = (sData) => {
     let stockDate = Object.keys(sData)[0];
     stockDate = new Date(stockDate);
