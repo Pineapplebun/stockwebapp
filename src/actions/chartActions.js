@@ -5,17 +5,17 @@ export const fetchChart = (queryData) => dispatch => {
   fetch(`/search?symbol=${queryData.symbol}&start=${queryData.minDate}&end=${queryData.maxDate}`, fetchOptions)
     .then(response => {
       if (response.ok) {
-        let json = response.json();
-        // Need to check if newsData and stockData are valid
-        if (json.stockData && json.newsData) {
-          dispatch({
-            type: FETCH_CHART,
-            payload1: json.stockData,
-            payload2: json.newsData,
-          })
-        } else {
-          throw response.error;
-        }
+        response.json().then((obj) => {
+          if (obj.stockData && obj.newsData) {
+            dispatch({
+              type: FETCH_CHART,
+              payload1: obj.stockData,
+              payload2: obj.newsData,
+            })
+          } else {
+            throw response.error;
+          }
+        }); // This is a promise  
       } else {
         throw response.error;
       }

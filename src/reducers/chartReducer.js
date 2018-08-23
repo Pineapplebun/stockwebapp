@@ -1,7 +1,7 @@
 import { FETCH_CHART, CHART_OPTIONS, SELECT_STOCK, SELECT_SIDE_FRAME_CARD } from '../actions/types';
 
 const initialState = {
-  chartData: [],
+  stockData: [],
   newsData: [],
   selectStock: '',
   selectSideFrameCard: 'Sign In',
@@ -17,7 +17,7 @@ export default function (state = initialState, action) {
     case FETCH_CHART:
       return {
         ...state,
-        chartData: action.payload1,
+        stockData: action.payload1,
         newsData: action.payload2,
       };
     case CHART_OPTIONS:

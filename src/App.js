@@ -6,7 +6,6 @@ import MainFrame from './components/MainFrame.js';
 import NewsFrame from './components/NewsFrame.js';
 import HeaderFrame from './components/HeaderFrame.js';
 import FeaturesBar from './components/FeaturesBar.js';
-
 import FooterBar from './components/FooterBar.js';
 
 class App extends Component {
